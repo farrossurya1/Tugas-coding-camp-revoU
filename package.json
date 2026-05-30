@@ -1,0 +1,29 @@
+{
+  "name": "expense-budget-visualizer",
+  "version": "1.0.0",
+  "description": "Expense & Budget Visualizer",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "fast-check": "^3.22.0",
+    "vitest": "^2.1.0"
+  },
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/farrossurya1/Tugas-coding-camp-revoU.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/farrossurya1/Tugas-coding-camp-revoU/issues"
+  },
+  "homepage": "https://github.com/farrossurya1/Tugas-coding-camp-revoU#readme"
+}

@@ -1,0 +1,506 @@
+/* ============================================================
+   CSS Reset / Normalize Basics
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  /* Prevent horizontal scrolling at the root level */
+  overflow-x: hidden;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  /* #1a1a2e on #f5f5f5 ≈ 13.5:1 — well above 4.5:1 AA */
+  background-color: #f5f5f5;
+  color: #1a1a2e;
+  line-height: 1.6;
+  min-height: 100vh;
+  /* Prevent any child element from causing horizontal scroll */
+  overflow-x: hidden;
+}
+
+img,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  font: inherit;
+}
+
+/* ============================================================
+   App Layout — Responsive Grid (320px – 1920px)
+   ============================================================ */
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  /* Use clamp so padding scales down on very narrow viewports (320px)
+     without causing horizontal overflow */
+  padding: clamp(0.5rem, 3vw, 1.5rem);
+}
+
+.app-header {
+  padding: 1rem 0 1.5rem;
+  border-bottom: 2px solid #1a1a2e;
+  margin-bottom: 1.5rem;
+}
+
+.app-header h1 {
+  font-size: clamp(1.1rem, 4vw, 2rem);
+  font-weight: 700;
+  color: #1a1a2e; /* #1a1a2e on #f5f5f5 ≈ 13.5:1 */
+}
+
+/* ============================================================
+   Main Grid — single column → 2-col → 3-col
+   Four named areas: form | balance | list | chart
+   ============================================================ */
+.app-main {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "form"
+    "balance"
+    "list"
+    "chart";
+  gap: 1rem;
+}
+
+/* 640px+: side-by-side pairs */
+@media (min-width: 640px) {
+  .app-main {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "form    balance"
+      "list    chart";
+    gap: 1.25rem;
+  }
+}
+
+/* 1024px+: three-column layout */
+@media (min-width: 1024px) {
+  .app-main {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas:
+      "form    balance  balance"
+      "list    list     chart";
+    gap: 1.5rem;
+  }
+}
+
+/* ============================================================
+   Region Cards
+   ============================================================ */
+.region {
+  background-color: #ffffff;
+  /* #d0d0d8 border on #ffffff background: border-to-background contrast
+     is not directly measured by WCAG, but the card boundary against the
+     #f5f5f5 page background: #d0d0d8 vs #f5f5f5 ≈ 1.2:1 (decorative only).
+     The card itself is white, providing clear visual separation. */
+  border: 1px solid #d0d0d8;
+  border-radius: 8px;
+  padding: clamp(0.75rem, 2vw, 1.25rem);
+  /* Prevent any internal content from causing horizontal overflow */
+  overflow: hidden;
+  /* Ensure the card never exceeds its grid cell */
+  min-width: 0;
+}
+
+.region-form    { grid-area: form; }
+.region-balance { grid-area: balance; }
+.region-list    { grid-area: list; }
+.region-chart   { grid-area: chart; }
+
+.region h2 {
+  font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+  font-weight: 600;
+  color: #1a1a2e; /* #1a1a2e on #ffffff ≈ 14.7:1 */
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e0e0e8;
+}
+
+/* ============================================================
+   Input Form
+   ============================================================ */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1a1a2e; /* #1a1a2e on #ffffff ≈ 14.7:1 — well above 4.5:1 */
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  color: #1a1a2e; /* #1a1a2e on #ffffff ≈ 14.7:1 */
+  background-color: #ffffff;
+  /* #595966 border on #ffffff ≈ 5.9:1 — exceeds 3:1 UI component threshold */
+  border: 2px solid #595966;
+  border-radius: 4px;
+  transition: border-color 0.15s ease;
+  /* Prevent inputs from overflowing their container */
+  max-width: 100%;
+}
+
+.form-group input:hover,
+.form-group select:hover {
+  border-color: #1a1a2e;
+}
+
+/* ============================================================
+   Focus Indicators — WCAG 2.1 AA
+   ============================================================
+   Strategy:
+   - Use :focus-visible for modern browsers (avoids outline on mouse click)
+   - Provide a plain :focus fallback for browsers without :focus-visible support
+     (the :focus-visible rule will override it in supporting browsers)
+   - #005fcc focus ring on white background ≈ 5.9:1 — meets 3:1 for UI components
+   ============================================================ */
+
+/* Universal fallback — shown in all browsers */
+:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+/* Modern browsers: suppress outline on mouse/touch, keep it for keyboard */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Explicit :focus-visible rule (same style, ensures specificity) */
+:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+/* Inputs and selects: zero offset so the ring hugs the border */
+.form-group input:focus,
+.form-group select:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 0;
+  border-color: #005fcc;
+}
+
+.form-group input:focus:not(:focus-visible),
+.form-group select:focus:not(:focus-visible) {
+  outline: none;
+  border-color: #595966;
+}
+
+.form-group input:focus-visible,
+.form-group select:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 0;
+  border-color: #005fcc;
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn-primary {
+  display: inline-block;
+  width: 100%;
+  padding: 0.6rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  /* #ffffff on #1a5276 ≈ 7.5:1 — well above 4.5:1 */
+  color: #ffffff;
+  background-color: #1a5276;
+  border: 2px solid #1a5276;
+  border-radius: 4px;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-primary:hover {
+  background-color: #154360;
+  border-color: #154360;
+}
+
+/* Delete button per transaction row */
+.btn-delete {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  /* #ffffff on #c0392b ≈ 5.1:1 — meets 4.5:1 */
+  color: #ffffff;
+  background-color: #c0392b;
+  border: 2px solid #c0392b;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+  flex-shrink: 0;
+  /* Ensure the button is always reachable and not clipped */
+  white-space: nowrap;
+}
+
+.btn-delete:hover {
+  background-color: #a93226;
+  border-color: #a93226;
+}
+
+/* Dismiss button for error banner */
+.btn-dismiss {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  /* #ffffff on transparent over #7b1d1d background ≈ 9.5:1 */
+  color: #ffffff;
+  background: transparent;
+  border: 2px solid #ffffff;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.btn-dismiss:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================================
+   Inline Field Errors
+   ============================================================ */
+.field-error {
+  font-size: 0.8rem;
+  font-weight: 600;
+  /* #b91c1c on #ffffff ≈ 5.9:1 — meets 4.5:1 */
+  color: #b91c1c;
+  /* Reserve space to prevent layout shift when error appears/disappears */
+  min-height: 1.1em;
+  display: block;
+}
+
+/* ============================================================
+   App-Level Error Banner
+   ============================================================ */
+.app-error-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  /* #ffffff on #7b1d1d ≈ 9.5:1 */
+  background-color: #7b1d1d;
+  color: #ffffff;
+  border-radius: 6px;
+  border: 2px solid #991b1b;
+  /* Prevent banner from overflowing on narrow screens */
+  flex-wrap: wrap;
+}
+
+.app-error-banner[hidden] {
+  display: none;
+}
+
+.app-error-message {
+  font-size: 0.9rem;
+  font-weight: 500;
+  /* Allow message text to wrap rather than overflow */
+  word-break: break-word;
+  flex: 1;
+}
+
+/* ============================================================
+   Balance Display
+   ============================================================ */
+.balance-amount {
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  font-weight: 700;
+  /* #1a5276 on #ffffff ≈ 7.5:1 */
+  color: #1a5276;
+  letter-spacing: -0.02em;
+  /* Allow long numbers to wrap rather than overflow */
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+/* ============================================================
+   Transaction List — scrollable region
+   ============================================================ */
+.transaction-list-wrapper {
+  /* Fixed height so the list scrolls without pushing other regions */
+  max-height: 320px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid #d0d0d8;
+  border-radius: 4px;
+}
+
+/* Scrollable region is focusable (tabindex="0" in HTML) — show focus ring */
+.transaction-list-wrapper:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+.transaction-list-wrapper:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.transaction-list-wrapper:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+.transaction-list {
+  width: 100%;
+}
+
+.transaction-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid #e8e8f0;
+  /* Allow wrapping on very narrow viewports so delete button stays visible */
+  flex-wrap: wrap;
+}
+
+.transaction-item:last-child {
+  border-bottom: none;
+}
+
+.transaction-item:nth-child(even) {
+  background-color: #f9f9fc;
+}
+
+.transaction-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  /* Allow text to shrink and truncate rather than overflow */
+  min-width: 0;
+  flex: 1;
+}
+
+.transaction-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1a1a2e; /* #1a1a2e on #ffffff ≈ 14.7:1 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.transaction-meta {
+  font-size: 0.8rem;
+  /* #4a4a5a on #ffffff ≈ 7.2:1 — well above 4.5:1 */
+  color: #4a4a5a;
+}
+
+.transaction-amount {
+  font-weight: 700;
+  font-size: 0.95rem;
+  /* #1a5276 on #ffffff ≈ 7.5:1 */
+  color: #1a5276;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   Empty State
+   ============================================================ */
+.empty-state {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  /* #4a4a5a on #ffffff ≈ 7.2:1 */
+  color: #4a4a5a;
+  font-style: italic;
+}
+
+/* ============================================================
+   Pie Chart
+   ============================================================ */
+.chart-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  /* Prevent chart from overflowing its card */
+  overflow: hidden;
+}
+
+#pie-chart {
+  /* Fluid width up to the canvas's intrinsic 300px */
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  /* Maintain square aspect ratio */
+  aspect-ratio: 1 / 1;
+}
+
+.chart-empty-state {
+  padding: 0.5rem;
+}
+
+/* ============================================================
+   Overflow Guards — prevent horizontal scroll at any viewport
+   ============================================================ */
+.app-container,
+.app-main,
+.region,
+.transaction-list-wrapper,
+.transaction-list,
+.transaction-item,
+.chart-wrapper {
+  max-width: 100%;
+}
+
+/* ============================================================
+   Very narrow viewport (< 360px) — extra padding reduction
+   ============================================================ */
+@media (max-width: 359px) {
+  .app-container {
+    padding: 0.375rem;
+  }
+
+  .region {
+    padding: 0.625rem;
+  }
+
+  /* Ensure form inputs don't overflow at 320px */
+  .form-group input,
+  .form-group select {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.5rem;
+  }
+
+  .btn-primary {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* ============================================================
+   Wide viewport (> 1440px) — cap content width, center layout
+   ============================================================ */
+@media (min-width: 1440px) {
+  .app-container {
+    max-width: 1400px;
+  }
+}

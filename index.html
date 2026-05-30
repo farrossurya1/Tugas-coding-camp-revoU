@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense &amp; Budget Visualizer</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <h1>Expense &amp; Budget Visualizer</h1>
+    </header>
+
+    <!-- App-level error banner (hidden by default) -->
+    <div id="app-error-banner" class="app-error-banner" role="alert" aria-live="assertive" hidden>
+      <span id="app-error-message" class="app-error-message"></span>
+      <button type="button" id="app-error-dismiss" class="btn-dismiss" aria-label="Dismiss error">✕</button>
+    </div>
+
+    <main class="app-main">
+      <!-- Region 1: Input Form -->
+      <section class="region region-form" aria-labelledby="form-heading">
+        <h2 id="form-heading">Add Transaction</h2>
+        <form id="transaction-form" novalidate>
+          <div class="form-group">
+            <label for="item-name">Item Name</label>
+            <input
+              type="text"
+              id="item-name"
+              name="name"
+              placeholder="e.g. Lunch"
+              autocomplete="off"
+              aria-required="true"
+              aria-describedby="name-error"
+            />
+            <span id="name-error" class="field-error" role="alert" aria-live="polite" hidden></span>
+          </div>
+
+          <div class="form-group">
+            <label for="item-amount">Amount (in IDR)</label>
+            <input
+              type="number"
+              id="item-amount"
+              name="amount"
+              placeholder="0"
+              min="1"
+              step="1"
+              aria-required="true"
+              aria-describedby="amount-error"
+            />
+            <span id="amount-error" class="field-error" role="alert" aria-live="polite" hidden></span>
+          </div>
+
+          <div class="form-group">
+            <label for="item-category">Category</label>
+            <select
+              id="item-category"
+              name="category"
+              aria-required="true"
+              aria-describedby="category-error"
+            >
+              <option value="">-- Select a category --</option>
+              <option value="Food">Food</option>
+              <option value="Transport">Transport</option>
+              <option value="Fun">Fun</option>
+            </select>
+            <span id="category-error" class="field-error" role="alert" aria-live="polite" hidden></span>
+          </div>
+
+          <button type="submit" class="btn-primary" id="add-transaction-btn" aria-label="Add transaction to list">
+            Add Transaction
+          </button>
+        </form>
+      </section>
+
+      <!-- Region 2: Balance Display -->
+      <section class="region region-balance" aria-labelledby="balance-heading">
+        <h2 id="balance-heading">Total Balance</h2>
+        <p class="balance-amount" id="balance-display" aria-live="polite" aria-atomic="true">
+          Rp0
+        </p>
+      </section>
+
+      <!-- Region 3: Transaction List -->
+      <section class="region region-list" aria-labelledby="list-heading">
+        <h2 id="list-heading">Transactions</h2>
+        <div class="transaction-list-wrapper" aria-label="Scrollable transaction list" tabindex="0">
+          <ul id="transaction-list" class="transaction-list" aria-label="Recorded transactions" role="list">
+            <!-- Transactions rendered here by renderer.js -->
+          </ul>
+          <p id="empty-state" class="empty-state" aria-live="polite">
+            No transactions recorded yet.
+          </p>
+        </div>
+      </section>
+
+      <!-- Region 4: Pie Chart -->
+      <section class="region region-chart" aria-labelledby="chart-heading">
+        <h2 id="chart-heading">Spending by Category</h2>
+        <div class="chart-wrapper">
+          <canvas
+            id="pie-chart"
+            width="300"
+            height="300"
+            role="img"
+            aria-label="Pie chart showing spending distribution by category. Add transactions to see data."
+            aria-describedby="chart-empty-state"
+          ></canvas>
+          <p id="chart-empty-state" class="empty-state chart-empty-state" aria-live="polite">
+            No data to visualize yet.
+          </p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ES Module scripts -->
+  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/store.js"></script>
+  <script type="module" src="js/validator.js"></script>
+  <script type="module" src="js/renderer.js"></script>
+  <script type="module" src="js/chart.js"></script>
+</body>
+</html>
